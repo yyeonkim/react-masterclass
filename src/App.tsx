@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     border: 0;
-    font-size: 100%;
+    font: inherit;
     font-family: 'Source Sans Pro', sans-serif;
     vertical-align: baseline;
   }
@@ -28,7 +28,12 @@ const GlobalStyle = createGlobalStyle`
   footer, header, hgroup, menu, nav, section {
     display: block;
   }
+  html {
+    font-weight: 400;
+    font-size: 10px;
+  }
   body {
+    font-family: 'Source Sans Pro', sans-serif;
     line-height: 1;
     background-color: ${(props) => props.theme.bgColor};
     color: ${(props) => props.theme.textColor};
@@ -48,11 +53,9 @@ const GlobalStyle = createGlobalStyle`
     border-collapse: collapse;
     border-spacing: 0;
   }
-  html {
-    font-size: 10px;
-  }
   a {
     text-decoration: none;
+    color: inherit;
   }
   * {
     box-sizing: border-box;
