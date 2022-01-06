@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams, Switch, Route } from "react-router-dom";
+import {
+  useLocation,
+  useParams,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+} from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -73,6 +80,8 @@ export default function Coin() {
   const [info, setInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
   const { state } = useLocation<RouteState>();
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
 
   useEffect(() => {
     (async () => {
@@ -124,6 +133,16 @@ export default function Coin() {
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
+
+          <Tabs>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
+
           <Switch>
             <Route path={`/${coinId}/price`}>
               <Price />
@@ -186,4 +205,26 @@ const OverviewItem = styled.div`
 const Description = styled.p`
   margin: 2rem 0;
   font-size: 1.6rem;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 2.5rem 0;
+  gap: 1rem;
+`;
+
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.7rem 0;
+  border-radius: 1rem;
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
 `;
