@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Coin() {
@@ -82,18 +82,46 @@ export default function Coin() {
       ).json();
       setInfo(infoData);
       setPriceInfo(priceData);
-      console.log(infoData);
-      console.log(priceData);
       setIsLoading(false);
     })();
-  }, []);
+  }, [coinId]);
 
   return (
     <Container>
       <Header>
         <Title>{state?.name || "Loading"}</Title>
       </Header>
-      {isLoading ? <Loader>Loading...</Loader> : null}
+      {isLoading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Suply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+        </>
+      )}
     </Container>
   );
 }
@@ -120,4 +148,30 @@ const Title = styled.h1`
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+`;
+
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.6rem;
+  span:first-child {
+    font-size: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+`;
+
+const Description = styled.p`
+  margin: 2rem 0;
+  font-size: 1.6rem;
 `;
