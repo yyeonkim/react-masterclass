@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
+import Chart from "./Chart";
+import Price from "./Price";
 
 export default function Coin() {
   interface RouteParams {
@@ -89,7 +91,9 @@ export default function Coin() {
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading"}</Title>
+        <Title>
+          {state?.name ? state.name : isLoading ? "Loading..." : info?.name}
+        </Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -120,6 +124,14 @@ export default function Coin() {
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
         </>
       )}
     </Container>
