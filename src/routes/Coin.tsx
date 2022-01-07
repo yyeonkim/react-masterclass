@@ -38,6 +38,9 @@ export default function Coin() {
         </title>
       </Helmet>
       <Header>
+        <Back>
+          <Link to={"/"}>ALL COINS</Link>
+        </Back>
         <Title>
           {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
         </Title>
@@ -106,12 +109,16 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin: 2rem 0;
 `;
+
+const Back = styled.div``;
 
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 4.8rem;
+  margin-top: 0.5rem;
 `;
 
 const Loader = styled.span`
