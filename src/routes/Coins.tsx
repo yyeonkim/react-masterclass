@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
+import { Helmet } from "react-helmet";
+
 import { fetchCoins } from "../api";
 
 export default function Coins() {
@@ -8,6 +10,9 @@ export default function Coins() {
 
   return (
     <Container>
+      <Helmet>
+        <title>Coins</title>
+      </Helmet>
       <Header>
         <Title>Coins</Title>
       </Header>

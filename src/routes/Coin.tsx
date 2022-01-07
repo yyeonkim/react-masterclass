@@ -8,6 +8,8 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
+
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -30,6 +32,11 @@ export default function Coin() {
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : isLoading ? "Loading..." : infoData?.name}

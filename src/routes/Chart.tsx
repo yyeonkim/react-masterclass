@@ -9,52 +9,61 @@ export default function Chart({ coinId }: ChartProps) {
     { refetchInterval: 10000 }
   );
   return (
-    <div>
+    <>
       {isLoading ? (
         "Loading chart..."
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: "Closing price",
-              data: data?.map((price) => Math.floor(price.close)),
+              data: data?.map((price) => {
+                return {
+                  x: price.time_close,
+                  y: [
+                    price.open.toFixed(3),
+                    price.high.toFixed(3),
+                    price.low.toFixed(3),
+                    price.close.toFixed(3),
+                  ],
+                };
+              }),
             },
           ]}
           options={{
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: "#ff7675",
+                  downward: "#74b9ff",
+                },
+                wick: {
+                  useFillColor: true,
+                },
+              },
+            },
             xaxis: {
               type: "datetime",
               labels: { show: false },
               axisTicks: { show: false },
               axisBorder: { show: false },
             },
-            grid: { show: false },
-            stroke: {
-              curve: "smooth",
-              width: 4,
+            yaxis: {
+              labels: { show: true, formatter: (value) => value.toFixed(0) },
             },
+            grid: { show: false },
             theme: { mode: "dark" },
             chart: {
-              width: 500,
+              type: "candlestick",
+              width: "100%",
               height: 300,
               toolbar: { show: false },
               background: "transparent",
             },
-            colors: ["#1B9CFC"],
-            fill: {
-              type: "gradient",
-              gradient: {
-                gradientToColors: ["#55E6C1"],
-                stops: [0, 100],
-              },
-            },
-            tooltip: {
-              y: { formatter: (value) => `$ ${value.toFixed(3)}` },
-            },
           }}
         />
       )}
-    </div>
+    </>
   );
 }
 
