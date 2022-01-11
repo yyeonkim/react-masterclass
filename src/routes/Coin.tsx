@@ -14,7 +14,7 @@ import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
-export default function Coin() {
+export default function Coin({ isDark }: ICoinProps) {
   const { state } = useLocation<RouteState>();
   const { coinId } = useParams<RouteParams>();
   const priceMatch = useRouteMatch("/:coinId/price");
@@ -60,7 +60,7 @@ export default function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>Price:</span>
-              <span>{`$ ${tickersData?.quotes.USD.price.toFixed(2)}`}</span>
+              <span>{`$ ${tickersData?.quotes?.USD?.price?.toFixed(2)}`}</span>
             </OverviewItem>
           </Overview>
           <Description>{infoData?.description}</Description>
@@ -89,7 +89,7 @@ export default function Coin() {
               <Price />
             </Route>
             <Route path={`/${coinId}/chart`}>
-              <Chart coinId={coinId} />
+              <Chart coinId={coinId} isDark={isDark} />
             </Route>
           </Switch>
         </>
@@ -173,6 +173,10 @@ const Tab = styled.span<{ isActive: boolean }>`
     display: block;
   }
 `;
+
+interface ICoinProps {
+  isDark: boolean;
+}
 
 interface RouteParams {
   coinId: string;
