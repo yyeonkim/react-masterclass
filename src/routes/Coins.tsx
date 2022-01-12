@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Helmet } from "react-helmet";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { fetchCoins } from "../api";
 import { isDarkAtom } from "../atoms";
 
 export default function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
-  const [isDark, setIsDark] = useRecoilState(isDarkAtom);
+  const setIsDark = useSetRecoilState(isDarkAtom);
 
   const toggleDarkAtom = () => setIsDark((current) => !current);
 
