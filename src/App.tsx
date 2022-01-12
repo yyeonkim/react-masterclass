@@ -1,10 +1,15 @@
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { ReactQueryDevtools } from "react-query/devtools";
-import { useRecoilValue } from "recoil";
+import { createGlobalStyle } from "styled-components";
 
-import Router from "./routes/Router";
-import { darkTheme, lightTheme } from "./theme";
-import { isDarkAtom } from "./atoms";
+import ToDoList from "./ToDoList";
+
+function App() {
+  return (
+    <>
+      <GlobalStyle />
+      <ToDoList />
+    </>
+  );
+}
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -66,17 +71,5 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 `;
-
-function App() {
-  const isDark = useRecoilValue(isDarkAtom);
-
-  return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
-    </ThemeProvider>
-  );
-}
 
 export default App;
