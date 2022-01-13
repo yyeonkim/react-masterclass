@@ -40,6 +40,7 @@ interface IForm {
   password: string;
   comfirmation: string;
   email?: string;
+  extraError?: string;
 }
 
 export default function ToDoList() {
@@ -47,10 +48,19 @@ export default function ToDoList() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IForm>();
   console.log(errors);
 
-  const onValid = (data: any) => console.log(data);
+  const onValid = (data: IForm) => {
+    if (data.password !== data.comfirmation) {
+      setError(
+        "comfirmation",
+        { message: "Passwords are not the same" },
+        { shouldFocus: true }
+      );
+    }
+  };
 
   return (
     <div>
@@ -69,7 +79,10 @@ export default function ToDoList() {
         />
         <span>{errors.lastName?.message}</span>
         <input
-          {...register("username", { required: "Required" })}
+          {...register("username", {
+            required: "Required",
+            validate: (value) => value === "yeon" && "이미 사용 중입니다.",
+          })}
           placeholder="Username"
         />
         <span>{errors.username?.message}</span>
