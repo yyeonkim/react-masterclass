@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 // export default function ToDoList() {
 //   const [toDo, setToDo] = useState("");
@@ -34,12 +33,21 @@ import { useForm, SubmitHandler } from "react-hook-form";
 //   );
 // }
 
+interface IForm {
+  firstName: string;
+  lastName: string;
+  username: string;
+  password: string;
+  comfirmation: string;
+  email?: string;
+}
+
 export default function ToDoList() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<IForm>();
   console.log(errors);
 
   const onValid = (data: any) => console.log(data);
@@ -51,29 +59,44 @@ export default function ToDoList() {
         onSubmit={handleSubmit(onValid)}
       >
         <input
-          {...register("firstName", { required: true })}
+          {...register("firstName", { required: "Required" })}
           placeholder="First Name"
         />
+        <span>{errors.firstName?.message}</span>
         <input
-          {...register("lastName", { required: true })}
+          {...register("lastName", { required: "Required" })}
           placeholder="Last Name"
         />
+        <span>{errors.lastName?.message}</span>
         <input
-          {...register("username", { required: true })}
+          {...register("username", { required: "Required" })}
           placeholder="Username"
         />
+        <span>{errors.username?.message}</span>
         <input
           {...register("password", {
-            required: true,
+            required: "Required",
             minLength: { value: 8, message: "Password is too short" },
           })}
           placeholder="Password"
         />
+        <span>{errors.password?.message}</span>
         <input
-          {...register("comfirmation", { required: true, minLength: 8 })}
+          {...register("comfirmation", { required: "Required", minLength: 8 })}
           placeholder="Password Comfirmation"
         />
-        <input {...register("email")} placeholder="Email" />
+        <span>{errors.comfirmation?.message}</span>
+        <input
+          {...register("email", {
+            pattern: {
+              value:
+                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+              message: "Only email allowed",
+            },
+          })}
+          placeholder="Email"
+        />
+        <span>{errors.email?.message}</span>
         <button>Add</button>
       </form>
     </div>
