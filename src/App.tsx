@@ -1,3 +1,80 @@
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+
 export default function App() {
-  return <></>;
+  const onDragEnd = () => {};
+
+  const toDos = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+  ];
+
+  return (
+    <Wrapper>
+      <Boards>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="todo">
+            {(provided) => (
+              <Board ref={provided.innerRef} {...provided.droppableProps}>
+                {toDos.map((toDo, index) => (
+                  <Draggable draggableId={toDo} index={index}>
+                    {(provided) => (
+                      <Card
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        {toDo}
+                      </Card>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </Board>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </Boards>
+    </Wrapper>
+  );
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 48rem;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.6rem;
+`;
+
+const Boards = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+`;
+
+const Board = styled.div`
+  padding: 1rem;
+  padding-top: 4rem;
+  background-color: ${(props) => props.theme.boardColor};
+  border-radius: 0.5rem;
+  min-height: 40rem;
+`;
+
+const Card = styled.div`
+  background-color: ${(props) => props.theme.cardColor};
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+`;

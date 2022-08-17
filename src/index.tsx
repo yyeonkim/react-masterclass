@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Source Sans Pro', sans-serif;
     line-height: 1;
     background-color: ${(props) => props.theme.bgColor};
-    color: ${(props) => props.theme.textColor};
+    color: "black"
   }
   ol, ul {
     list-style: none;
