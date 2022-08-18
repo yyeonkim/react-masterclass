@@ -1,4 +1,8 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  DraggableLocation,
+  DropResult,
+} from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
@@ -15,25 +19,38 @@ export default function App() {
 
     // Move in the same board
     if (destination.droppableId === source.droppableId) {
-      const boardCopy = [...toDos[source.droppableId]];
-      const [removed] = boardCopy.splice(source.index, 1);
-
-      boardCopy.splice(destination.index, 0, removed);
-      setToDos({ ...toDos, [source.droppableId]: boardCopy });
+      moveSameBoard(source, destination);
     } else {
-      // Move across boards
-      const sourceBoard = [...toDos[source.droppableId]];
-      const destinationBoard = [...toDos[destination.droppableId]];
-
-      const [removed] = sourceBoard.splice(source.index, 1);
-      destinationBoard.splice(destination.index, 0, removed);
-
-      setToDos({
-        ...toDos,
-        [source.droppableId]: sourceBoard,
-        [destination.droppableId]: destinationBoard,
-      });
+      moveAcrossBoards(source, destination);
     }
+  };
+
+  const moveSameBoard = (
+    source: DraggableLocation,
+    destination: DraggableLocation
+  ) => {
+    const boardCopy = [...toDos[source.droppableId]];
+    const [removed] = boardCopy.splice(source.index, 1);
+    boardCopy.splice(destination.index, 0, removed);
+
+    setToDos({ ...toDos, [source.droppableId]: boardCopy });
+  };
+
+  const moveAcrossBoards = (
+    source: DraggableLocation,
+    destination: DraggableLocation
+  ) => {
+    const sourceBoard = [...toDos[source.droppableId]];
+    const destinationBoard = [...toDos[destination.droppableId]];
+
+    const [removed] = sourceBoard.splice(source.index, 1);
+    destinationBoard.splice(destination.index, 0, removed);
+
+    setToDos({
+      ...toDos,
+      [source.droppableId]: sourceBoard,
+      [destination.droppableId]: destinationBoard,
+    });
   };
 
   return (

@@ -17,12 +17,12 @@ export default function DroppableBoard({
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
         {(provided) => (
-          <Board ref={provided.innerRef} {...provided.droppableProps}>
+          <Area ref={provided.innerRef} {...provided.droppableProps}>
             {toDos.map((toDo, index) => (
               <DraggableCard key={toDo} toDo={toDo} index={index} />
             ))}
             {provided.placeholder}
-          </Board>
+          </Area>
         )}
       </Droppable>
     </Flex>
@@ -35,12 +35,12 @@ const Flex = styled.div`
   flex-direction: column;
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 0.5rem;
-`;
-
-const Board = styled.div`
   padding: 1rem;
   padding-top: 0;
-  /* background-color: ${(props) => props.theme.boardColor}; */
+`;
+
+const Area = styled.div`
+  background-color: #219ebc;
   min-height: 30rem;
   border-radius: 0.5rem;
 `;
