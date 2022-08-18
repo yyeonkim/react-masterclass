@@ -3,7 +3,6 @@ import {
   Droppable,
   Draggable,
   DropResult,
-  ResponderProvided,
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -11,17 +10,27 @@ import { toDoState } from "./atoms";
 
 export default function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = (result: DropResult) => {
-    const items = reorder(toDos, result.source.index, result.destination.index);
 
-    setToDos(items as string[]);
+  const onDragEnd = (result: DropResult) => {
+    const reorderedToDos = reorder(
+      toDos,
+      result.source.index,
+      result.destination.index
+    );
+
+    setToDos(reorderedToDos as string[]);
   };
 
-  // a little function to help us with reordering the result
-  const reorder = (list: string[], startIndex: number, endIndex: number) => {
+  // 1) Delete item on sourceIndex
+  // 2) Put back the item on destinationIndex
+  const reorder = (
+    list: string[],
+    sourceIndex: number,
+    destinationIndex: number
+  ) => {
     const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+    const [removed] = result.splice(sourceIndex, 1);
+    result.splice(destinationIndex, 0, removed);
 
     return result;
   };
