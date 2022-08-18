@@ -16,8 +16,13 @@ export default function DroppableBoard({
     <Flex>
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
-        {(provided) => (
-          <Area ref={provided.innerRef} {...provided.droppableProps}>
+        {(provided, snapshot) => (
+          <Area
+            isDraggingOver={snapshot.isDraggingOver}
+            draggingFromThisWith={Boolean(snapshot.draggingFromThisWith)}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
             {toDos.map((toDo, index) => (
               <DraggableCard key={toDo} toDo={toDo} index={index} />
             ))}
@@ -27,6 +32,11 @@ export default function DroppableBoard({
       </Droppable>
     </Flex>
   );
+}
+
+interface IAreaProps {
+  isDraggingOver: boolean;
+  draggingFromThisWith: boolean;
 }
 
 const Flex = styled.div`
@@ -39,10 +49,11 @@ const Flex = styled.div`
   padding-top: 0;
 `;
 
-const Area = styled.div`
-  background-color: #219ebc;
+const Area = styled.div<IAreaProps>`
+  background-color: ${(props) => props.isDraggingOver && "#219ebc"};
   min-height: 30rem;
   border-radius: 0.5rem;
+  transition: background-color 0.1s ease;
 `;
 
 const Title = styled.div`
