@@ -67,6 +67,8 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
   flex-wrap: wrap;
 `;
