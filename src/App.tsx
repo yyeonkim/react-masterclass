@@ -1,21 +1,20 @@
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { toDoState } from "./atoms";
-import DraggableCard from "./Components/DraggableCard";
+import DroppableBoard from "./Components/DroppableBoard";
 
 export default function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
   const onDragEnd = (result: DropResult) => {
-    const reorderedToDos = reorder(
-      toDos,
-      result.source.index,
-      result.destination.index
-    );
-
-    setToDos(reorderedToDos as string[]);
+    // const reorderedToDos = reorder(
+    //   toDos,
+    //   result.source.index,
+    //   result.destination.index
+    // );
+    // setToDos(reorderedToDos as string[]);
   };
 
   // 1) Delete item on sourceIndex
@@ -25,6 +24,9 @@ export default function App() {
     sourceIndex: number,
     destinationIndex: number
   ) => {
+    // 위치가 바뀌지 않으면
+    if (!destinationIndex) return;
+
     const result = Array.from(list);
     const [removed] = result.splice(sourceIndex, 1);
     result.splice(destinationIndex, 0, removed);
@@ -36,16 +38,13 @@ export default function App() {
     <Wrapper>
       <Boards>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="todo">
-            {(provided) => (
-              <Board ref={provided.innerRef} {...provided.droppableProps}>
-                {toDos.map((toDo, index) => (
-                  <DraggableCard key={toDo} toDo={toDo} index={index} />
-                ))}
-                {provided.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((boardId) => (
+            <DroppableBoard
+              key={boardId}
+              toDos={toDos[boardId]}
+              boardId={boardId}
+            />
+          ))}
         </DragDropContext>
       </Boards>
     </Wrapper>
@@ -54,7 +53,7 @@ export default function App() {
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 48rem;
+  max-width: 80rem;
   width: 100%;
   margin: 0 auto;
   justify-content: center;
@@ -66,13 +65,6 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-`;
-
-const Board = styled.div`
-  padding: 1rem;
-  padding-top: 4rem;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 0.5rem;
-  min-height: 40rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
 `;
