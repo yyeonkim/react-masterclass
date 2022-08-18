@@ -9,30 +9,28 @@ export default function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
   const onDragEnd = (result: DropResult) => {
-    // const reorderedToDos = reorder(
-    //   toDos,
-    //   result.source.index,
-    //   result.destination.index
-    // );
-    // setToDos(reorderedToDos as string[]);
+    const { draggableId, destination, source } = result;
+
+    // Move in same board
+    if (destination.droppableId === source.droppableId) {
+      // Same index
+      if (!destination.index) return;
+
+      const boardCopy = [...toDos[source.droppableId]];
+      const [removed] = boardCopy.splice(source.index, 1);
+
+      boardCopy.splice(destination.index, 0, removed);
+      setToDos({ ...toDos, [source.droppableId]: boardCopy });
+    }
   };
 
   // 1) Delete item on sourceIndex
   // 2) Put back the item on destinationIndex
-  const reorder = (
-    list: string[],
-    sourceIndex: number,
-    destinationIndex: number
-  ) => {
-    // 위치가 바뀌지 않으면
-    if (!destinationIndex) return;
-
-    const result = Array.from(list);
-    const [removed] = result.splice(sourceIndex, 1);
-    result.splice(destinationIndex, 0, removed);
-
-    return result;
-  };
+  // const reorder = (
+  //   list: string[],
+  //   sourceIndex: number,
+  //   destinationIndex: number
+  // ) => {};
 
   return (
     <Wrapper>
