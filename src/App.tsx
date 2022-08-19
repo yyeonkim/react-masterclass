@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 export default function App() {
   return (
     <Wrapper>
-      <Box />
+      <Box
+        transition={{ type: "spring", damping: 10 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1, rotateZ: 360 }}
+      />
     </Wrapper>
   );
 }
