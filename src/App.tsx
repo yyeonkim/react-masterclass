@@ -1,23 +1,13 @@
 import styled from "styled-components";
-import { motion, useMotionValue } from "framer-motion";
-import { useEffect } from "react";
-
-const boxVariants = {
-  hover: { scale: 1.2, rotate: 90 },
-  tap: { borderRadius: "50%", scale: 0.8 },
-  drag: { backgroundColor: "rgb(255, 221, 89)", transition: { duration: 0.1 } },
-};
+import { motion, useMotionValue, useTransform } from "framer-motion";
 
 export default function App() {
   const x = useMotionValue(0);
-
-  useEffect(() => {
-    x.onChange(() => console.log(x.get()));
-  }, [x]);
+  const scaleByX = useTransform(x, [-800, 0, 800], [0.1, 1, 2]);
 
   return (
     <Wrapper>
-      <Box style={{ x }} drag="x" dragSnapToOrigin />
+      <Box style={{ x, scale: scaleByX }} drag="x" dragSnapToOrigin />
     </Wrapper>
   );
 }
