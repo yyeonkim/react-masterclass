@@ -2,23 +2,55 @@ import styled from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
+// Animation Variants
+
+const boxVariants = {
+  entry: (back: boolean) => ({
+    opacity: 0,
+    x: back ? -200 : 200,
+    scale: 0.5,
+    transition: { duration: 0.5 },
+  }),
+  center: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.5 } },
+  exit: (back: boolean) => ({
+    opacity: 0,
+    x: back ? 200 : -200,
+    scale: 0.5,
+    transition: { duration: 0.5 },
+  }),
+};
+
 export default function App() {
-  const [showing, setShowing] = useState(true);
-  const toggleShowing = () => setShowing((prev) => !prev);
+  const [visible, setVisible] = useState(0);
+  const [back, setBack] = useState(false);
+
+  const getNextSlider = () => {
+    setBack(false);
+    setVisible((prev) => (prev + 1) % 10);
+  };
+  const getPrevSlider = () => {
+    setBack(true);
+    setVisible((prev) => (prev + 9) % 10);
+  };
 
   return (
     <Wrapper>
-      <button onClick={toggleShowing}>SHOW</button>
-      <AnimatePresence>
-        {showing && (
-          <Box
-            variants={boxVariants}
-            initial="Initial"
-            animate="visible"
-            exit="exit"
-          />
-        )}
+      <AnimatePresence custom={back}>
+        <Box
+          custom={back}
+          variants={boxVariants}
+          initial="entry"
+          animate="center"
+          exit="exit"
+          key={visible}
+        >
+          {visible + 1}
+        </Box>
       </AnimatePresence>
+      <Buttons>
+        <button onClick={getPrevSlider}>PREV</button>
+        <button onClick={getNextSlider}>NEXT</button>
+      </Buttons>
     </Wrapper>
   );
 }
@@ -34,18 +66,19 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Box = styled(motion.div)`
-  width: 40rem;
-  height: 20rem;
-  background-color: white;
-  border-radius: 20px;
   position: absolute;
-  top: 20rem;
+  width: 20rem;
+  height: 20rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  background-color: white;
+  border-radius: 40px;
+  margin-bottom: 2rem;
 `;
 
-// Animation Variants
-
-const boxVariants = {
-  Initial: { opacity: 0 },
-  visible: { opacity: 1, scale: 1, rotateZ: 360 },
-  exit: { opacity: 0, y: -20 },
-};
+const Buttons = styled.button`
+  position: absolute;
+  bottom: 20rem;
+`;
