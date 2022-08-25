@@ -78,7 +78,7 @@ const Box = styled(motion.div)`
   margin-bottom: 2rem;
 `;
 
-const Buttons = styled.button`
+const Buttons = styled.div`
   position: absolute;
   bottom: 20rem;
 `;
