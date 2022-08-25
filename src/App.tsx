@@ -1,31 +1,39 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
 // Animation Variants
 
+const boxes = [0, 1, 2, 4];
+
 export default function App() {
-  const [clicked, setClicked] = useState(false);
-  const toggleClicked = () => setClicked((prev) => !prev);
+  const [id, setId] = useState<null | string>(null);
 
   return (
-    <Wrapper onClick={toggleClicked}>
-      <Box>
-        {!clicked && (
-          <Circle
-            layoutId="circle"
-            style={{ borderRadius: "50%", backgroundColor: "#00a5ff" }}
+    <Wrapper>
+      <Grid>
+        {boxes.map((box) => (
+          <Box
+            layoutId={`${box}`}
+            onClick={() => {
+              setId(`${box}`);
+            }}
           />
+        ))}
+      </Grid>
+      <AnimatePresence>
+        {id && (
+          <Overlay
+            onClick={() => setId(null)}
+            initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+            animate={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            exit={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
+            transition={{ default: { duration: 0.2 } }}
+          >
+            <Box layoutId={id} style={{ width: "40rem", height: "20rem" }} />
+          </Overlay>
         )}
-      </Box>
-      <Box>
-        {clicked && (
-          <Circle
-            layoutId="circle"
-            style={{ borderRadius: 0, backgroundColor: "#FEAE1A " }}
-          />
-        )}
-      </Box>
+      </AnimatePresence>
     </Wrapper>
   );
 }
@@ -39,22 +47,32 @@ const Wrapper = styled(motion.div)`
   background: linear-gradient(70deg, rgb(255, 90, 205), rgb(251, 218, 97));
 `;
 
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 50vw;
+  gap: 2rem;
+  div:first-child,
+  div:last-child {
+    grid-column: span 2;
+  }
+`;
+
 const Box = styled(motion.div)`
-  width: 20rem;
   height: 20rem;
-  margin: 0 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3rem;
   background-color: white;
-  border-radius: 40px;
-  margin-bottom: 2rem;
+  border-radius: 20px;
 `;
 
-const Circle = styled(motion.div)`
-  background-color: #00a5ff;
-  width: 10rem;
-  height: 10rem;
-  border-radius: 50%;
+const Overlay = styled(motion.div)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
