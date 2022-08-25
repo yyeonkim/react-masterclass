@@ -1,56 +1,23 @@
 import styled from "styled-components";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 // Animation Variants
 
-const boxVariants = {
-  entry: (back: boolean) => ({
-    opacity: 0,
-    x: back ? -200 : 200,
-    scale: 0.5,
-    transition: { duration: 0.5 },
-  }),
-  center: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.5 } },
-  exit: (back: boolean) => ({
-    opacity: 0,
-    x: back ? 200 : -200,
-    scale: 0.5,
-    transition: { duration: 0.5 },
-  }),
-};
-
 export default function App() {
-  const [visible, setVisible] = useState(0);
-  const [back, setBack] = useState(false);
-
-  const getNextSlider = () => {
-    setBack(false);
-    setVisible((prev) => (prev + 1) % 10);
-  };
-  const getPrevSlider = () => {
-    setBack(true);
-    setVisible((prev) => (prev + 9) % 10);
-  };
+  const [clicked, setClicked] = useState(false);
+  const toggleClicked = () => setClicked((prev) => !prev);
 
   return (
-    <Wrapper>
-      <AnimatePresence custom={back}>
-        <Box
-          custom={back}
-          variants={boxVariants}
-          initial="entry"
-          animate="center"
-          exit="exit"
-          key={visible}
-        >
-          {visible + 1}
-        </Box>
-      </AnimatePresence>
-      <Buttons>
-        <button onClick={getPrevSlider}>PREV</button>
-        <button onClick={getNextSlider}>NEXT</button>
-      </Buttons>
+    <Wrapper onClick={toggleClicked}>
+      <Box
+        style={{
+          justifyContent: clicked ? "center" : "flex-start",
+          alignItems: clicked ? "center" : "flex-start",
+        }}
+      >
+        <Circle layout />
+      </Box>
     </Wrapper>
   );
 }
@@ -78,7 +45,9 @@ const Box = styled(motion.div)`
   margin-bottom: 2rem;
 `;
 
-const Buttons = styled.div`
-  position: absolute;
-  bottom: 20rem;
+const Circle = styled(motion.div)`
+  background-color: #00a5ff;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
 `;
