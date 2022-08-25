@@ -10,13 +10,21 @@ export default function App() {
 
   return (
     <Wrapper onClick={toggleClicked}>
-      <Box
-        style={{
-          justifyContent: clicked ? "center" : "flex-start",
-          alignItems: clicked ? "center" : "flex-start",
-        }}
-      >
-        <Circle layout />
+      <Box>
+        {!clicked && (
+          <Circle
+            layoutId="circle"
+            style={{ borderRadius: "50%", backgroundColor: "#00a5ff" }}
+          />
+        )}
+      </Box>
+      <Box>
+        {clicked && (
+          <Circle
+            layoutId="circle"
+            style={{ borderRadius: 0, backgroundColor: "#FEAE1A " }}
+          />
+        )}
       </Box>
     </Wrapper>
   );
@@ -26,16 +34,15 @@ const Wrapper = styled(motion.div)`
   height: 100vh;
   width: 100vw;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: linear-gradient(70deg, rgb(255, 90, 205), rgb(251, 218, 97));
 `;
 
 const Box = styled(motion.div)`
-  position: absolute;
   width: 20rem;
   height: 20rem;
+  margin: 0 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
